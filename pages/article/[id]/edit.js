@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function EditArticle() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function EditArticle() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:3001/articles/${id}`).then(res => {
+      axios.get(`${BASE_URL}/articles/${id}`).then(res => {
         setFormData({
           title: res.data.title,
           authors: res.data.authors || '',
@@ -27,7 +28,7 @@ export default function EditArticle() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:3001/articles/${id}`, formData);
+      await axios.patch(`${BASE_URL}/articles/${id}`, formData);
       router.push(`/article/${id}`);
     } catch {
       alert('保存失败');

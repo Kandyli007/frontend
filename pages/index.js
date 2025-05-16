@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
@@ -9,7 +10,7 @@ export default function Home() {
 
   const fetchArticles = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/articles', {
+      const res = await axios.get('${BASE_URL}/articles', {
         params: { search, page, limit: 5 },
       });
       setArticles(res.data);
@@ -19,7 +20,7 @@ export default function Home() {
   };
 
   const updateStatus = async (id, status) => {
-    await axios.patch(`http://localhost:3001/articles/${id}/review`, { status });
+    await axios.patch(`${BASE_URL}/articles/${id}/review`, { status });
     fetchArticles();
   };
 

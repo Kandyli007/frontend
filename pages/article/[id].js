@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function ArticleDetail() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function ArticleDetail() {
 
   const fetchArticle = async () => {
     try {
-      const res = await axios.get(`http://localhost:3001/articles/${id}`);
+      const res = await axios.get(`${BASE_URL}/articles/${id}`);
       setArticle(res.data);
       setError('');
     } catch (err) {
@@ -25,7 +26,7 @@ export default function ArticleDetail() {
 
   const updateStatus = async (status) => {
     try {
-      await axios.patch(`http://localhost:3001/articles/${id}/review`, { status });
+      await axios.patch(`${BASE_URL}/articles/${id}/review`, { status });
       fetchArticle(); // 重新加载最新状态
     } catch (err) {
       alert('更新失败');
@@ -83,7 +84,7 @@ export default function ArticleDetail() {
     if (!author || !content) return;
 
     try {
-      await axios.post(`http://localhost:3001/articles/${id}/comments`, {
+      await axios.post(`${BASE_URL}/articles/${id}/comments`, {
         author,
         content,
       });
