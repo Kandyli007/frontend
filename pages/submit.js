@@ -12,35 +12,71 @@ export default function Submit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${BASE_URL}/articles`, { title, authors, abstract }); // 用反引号包裹
-      setMessage('提交成功！');
+      await axios.post(`${BASE_URL}/articles`, { title, authors, abstract });
+      setMessage('Submission Successful!');
       setTitle('');
       setAuthors('');
       setAbstract('');
     } catch (err) {
-      setMessage('提交失败');
+      setMessage('Submission Failed');
     }
   };
 
   return (
-    <div>
-      <h1>提交文章</h1>
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <h1>Submit Article</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>标题：</label>
-          <input value={title} onChange={e => setTitle(e.target.value)} required />
+        <div style={{ marginBottom: '15px' }}>
+          <label>Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+          />
         </div>
-        <div>
-          <label>作者：</label>
-          <input value={authors} onChange={e => setAuthors(e.target.value)} />
+        <div style={{ marginBottom: '15px' }}>
+          <label>Authors:</label>
+          <input
+            type="text"
+            value={authors}
+            onChange={(e) => setAuthors(e.target.value)}
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+          />
         </div>
-        <div>
-          <label>摘要：</label>
-          <textarea value={abstract} onChange={e => setAbstract(e.target.value)} />
+        <div style={{ marginBottom: '15px' }}>
+          <label>Abstract:</label>
+          <textarea
+            value={abstract}
+            onChange={(e) => setAbstract(e.target.value)}
+            style={{ width: '100%', padding: '8px', height: '150px', marginTop: '5px' }}
+          />
         </div>
-        <button type="submit">提交</button>
+        <button
+          type="submit"
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          Submit
+        </button>
       </form>
-      {message && <p>{message}</p>}
+      {message && (
+        <p
+          style={{
+            marginTop: '20px',
+            color: message === 'Submission Successful!' ? 'green' : 'red',
+            fontWeight: 'bold',
+          }}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 }

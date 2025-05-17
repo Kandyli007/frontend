@@ -19,7 +19,7 @@ export default function ArticleDetail() {
       setArticle(res.data);
       setError('');
     } catch (err) {
-      setError('文章未找到或已删除');
+      setError('Article not found or has been deleted');
     } finally {
       setLoading(false);
     }
@@ -28,9 +28,9 @@ export default function ArticleDetail() {
   const updateStatus = async (status) => {
     try {
       await axios.patch(`${BASE_URL}/articles/${id}/review`, { status });
-      fetchArticle(); // 重新加载最新状态
+      fetchArticle(); // Reload with the latest status
     } catch {
-      alert('更新失败');
+      alert('Update failed');
     }
   };
 
@@ -38,46 +38,46 @@ export default function ArticleDetail() {
     if (id) fetchArticle();
   }, [id]);
 
-  if (loading) return <p>加载中...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       <h1>{article.title}</h1>
-      <p><strong>作者：</strong>{article.authors || '未知'}</p>
-      <p><strong>摘要：</strong>{article.abstract || '无摘要'}</p>
-      <p><strong>状态：</strong>{article.status}</p>
-      <p><strong>创建时间：</strong>{new Date(article.createdAt).toLocaleString()}</p>
+      <p><strong>Author:</strong> {article.authors || 'Unknown'}</p>
+      <p><strong>Abstract:</strong> {article.abstract || 'No abstract available'}</p>
+      <p><strong>Status:</strong> {article.status}</p>
+      <p><strong>Created at:</strong> {new Date(article.createdAt).toLocaleString()}</p>
 
       {article.status === 'pending' && (
         <>
-          <button onClick={() => updateStatus('approved')}>✅ 批准</button>
-          <button onClick={() => updateStatus('rejected')}>❌ 拒绝</button>
+          <button onClick={() => updateStatus('approved')} style={{ padding: '8px 16px', marginRight: '10px' }}>✅ Approve</button>
+          <button onClick={() => updateStatus('rejected')} style={{ padding: '8px 16px' }}>❌ Reject</button>
         </>
       )}
 
       <Link href={`/article/${article._id}/edit`}>
-        <button>✏️ 编辑</button>
+        <button style={{ marginTop: '15px', padding: '8px 16px' }}>✏️ Edit</button>
       </Link>
 
-      <h3>评论</h3>
+      <h3>Comments</h3>
       <ul>
         {article.comments?.length > 0 ? (
           article.comments
             .slice()
             .reverse()
             .map((comment, i) => (
-              <li key={i}>
+              <li key={i} style={{ marginBottom: '10px' }}>
                 <p><strong>{comment.author}</strong>: {comment.content}</p>
                 <small>{new Date(comment.createdAt).toLocaleString()}</small>
               </li>
             ))
         ) : (
-          <p>暂无评论</p>
+          <p>No comments yet</p>
         )}
       </ul>
 
-      <h4>添加评论</h4>
+      <h4>Add a Comment</h4>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -90,19 +90,20 @@ export default function ArticleDetail() {
             fetchArticle();
             e.target.reset();
           } catch {
-            alert('提交失败');
+            alert('Submission failed');
           }
         }}
+        style={{ marginTop: '20px' }}
       >
-        <input name="author" placeholder="昵称" required />
+        <input name="author" placeholder="Your Name" required style={{ padding: '8px', width: '100%' }} />
         <br />
-        <textarea name="content" placeholder="写下你的评论" required />
+        <textarea name="content" placeholder="Write your comment" required style={{ padding: '8px', width: '100%', marginTop: '10px' }} />
         <br />
-        <button type="submit">提交评论</button>
+        <button type="submit" style={{ padding: '8px 16px', marginTop: '10px' }}>Submit Comment</button>
       </form>
 
       <br />
-      <Link href="/">← 返回首页</Link>
+      <Link href="/" style={{ textDecoration: 'none', color: 'blue' }}>← Back to Home</Link>
     </div>
   );
 }

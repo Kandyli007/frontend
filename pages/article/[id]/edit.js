@@ -32,39 +32,39 @@ export default function EditArticle() {
       await axios.patch(`${BASE_URL}/articles/${id}`, formData);
       router.push(`/article/${id}`);
     } catch {
-      alert('保存失败');
+      alert('Save failed');
     }
   };
 
   return (
     <div>
-      <h1>编辑文章</h1>
-      <form onSubmit={handleSubmit}>
-        <label>标题：</label>
+      <h1>Edit Article</h1>
+      <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <label style={{ display: 'block', marginBottom: '8px' }}>Title:</label>
         <input
           type="text"
           value={formData.title}
           onChange={e => setFormData({ ...formData, title: e.target.value })}
           required
+          style={{ width: '100%', padding: '8px', marginBottom: '20px' }}
         />
-        <br />
-
-        <label>作者：</label>
+        
+        <label style={{ display: 'block', marginBottom: '8px' }}>Authors:</label>
         <input
           type="text"
           value={formData.authors}
           onChange={e => setFormData({ ...formData, authors: e.target.value })}
+          style={{ width: '100%', padding: '8px', marginBottom: '20px' }}
         />
-        <br />
-
-        <label>摘要：</label>
+        
+        <label style={{ display: 'block', marginBottom: '8px' }}>Abstract:</label>
         <textarea
           value={formData.abstract}
           onChange={e => setFormData({ ...formData, abstract: e.target.value })}
+          style={{ width: '100%', padding: '8px', height: '150px', marginBottom: '20px' }}
         />
-        <br />
-
-        <button type="submit">保存修改</button>
+        
+        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#4CAF50', color: 'white', border: 'none' }}>Save Changes</button>
       </form>
     </div>
   );
