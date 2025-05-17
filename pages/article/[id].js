@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function ArticleDetail() {
@@ -28,7 +29,7 @@ export default function ArticleDetail() {
     try {
       await axios.patch(`${BASE_URL}/articles/${id}/review`, { status });
       fetchArticle(); // 重新加载最新状态
-    } catch (err) {
+    } catch {
       alert('更新失败');
     }
   };
@@ -55,55 +56,52 @@ export default function ArticleDetail() {
         </>
       )}
 
-<Link href={`/article/${article._id}/edit`}>
-  <button>✏️ 编辑</button>
-</Link>
+      <Link href={`/article/${article._id}/edit`}>
+        <button>✏️ 编辑</button>
+      </Link>
 
       <h3>评论</h3>
-<ul>
-  {article.comments?.length > 0 ? (
-    article.comments
-      .slice()
-      .reverse()
-      .map((comment, i) => (
-        <li key={i}>
-          <p><strong>{comment.author}</strong>: {comment.content}</p>
-          <small>{new Date(comment.createdAt).toLocaleString()}</small>
-        </li>
-      ))
-  ) : (
-    <p>暂无评论</p>
-  )}
-</ul>
-<h4>添加评论</h4>
-<form
-  onSubmit={async (e) => {
-    e.preventDefault();
-    const author = e.target.author.value;
-    const content = e.target.content.value;
-    if (!author || !content) return;
+      <ul>
+        {article.comments?.length > 0 ? (
+          article.comments
+            .slice()
+            .reverse()
+            .map((comment, i) => (
+              <li key={i}>
+                <p><strong>{comment.author}</strong>: {comment.content}</p>
+                <small>{new Date(comment.createdAt).toLocaleString()}</small>
+              </li>
+            ))
+        ) : (
+          <p>暂无评论</p>
+        )}
+      </ul>
 
-    try {
-      await axios.post(`${BASE_URL}/articles/${id}/comments`, {
-        author,
-        content,
-      });
-      fetchArticle();
-      e.target.reset();
-    } catch {
-      alert('提交失败');
-    }
-  }}
->
-  <input name="author" placeholder="昵称" required />
-  <br />
-  <textarea name="content" placeholder="写下你的评论" required />
-  <br />
-  <button type="submit">提交评论</button>
-</form>
+      <h4>添加评论</h4>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const author = e.target.author.value;
+          const content = e.target.content.value;
+          if (!author || !content) return;
 
+          try {
+            await axios.post(`${BASE_URL}/articles/${id}/comments`, { author, content });
+            fetchArticle();
+            e.target.reset();
+          } catch {
+            alert('提交失败');
+          }
+        }}
+      >
+        <input name="author" placeholder="昵称" required />
+        <br />
+        <textarea name="content" placeholder="写下你的评论" required />
+        <br />
+        <button type="submit">提交评论</button>
+      </form>
 
-      <br /><br />
+      <br />
       <Link href="/">← 返回首页</Link>
     </div>
   );

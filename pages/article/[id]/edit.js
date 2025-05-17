@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function EditArticle() {
@@ -41,6 +42,7 @@ export default function EditArticle() {
       <form onSubmit={handleSubmit}>
         <label>标题：</label>
         <input
+          type="text"
           value={formData.title}
           onChange={e => setFormData({ ...formData, title: e.target.value })}
           required
@@ -49,6 +51,7 @@ export default function EditArticle() {
 
         <label>作者：</label>
         <input
+          type="text"
           value={formData.authors}
           onChange={e => setFormData({ ...formData, authors: e.target.value })}
         />

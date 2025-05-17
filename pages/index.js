@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
 
   const fetchArticles = async () => {
     try {
-      const res = await axios.get('${BASE_URL}/articles', {
+      const res = await axios.get(`${BASE_URL}/articles`, {  // 改为反引号
         params: { search, page, limit: 5 },
       });
       setArticles(res.data);
@@ -44,8 +45,8 @@ export default function Home() {
               <strong style={{ cursor: 'pointer', color: 'blue' }}>
                 {article.title}
               </strong>
-            </Link>
-            {' '}— 状态: {article.status}
+            </Link>{' '}
+            — 状态: {article.status}
             {article.status === 'pending' && (
               <>
                 <button onClick={() => updateStatus(article._id, 'approved')}>批准</button>

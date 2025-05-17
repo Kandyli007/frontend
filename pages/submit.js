@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Submit() {
@@ -11,7 +12,7 @@ export default function Submit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('${BASE_URL}/articles', { title, authors, abstract });
+      await axios.post(`${BASE_URL}/articles`, { title, authors, abstract }); // 用反引号包裹
       setMessage('提交成功！');
       setTitle('');
       setAuthors('');
