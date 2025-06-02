@@ -54,10 +54,6 @@ export default function Home() {
             <option value="Agile">Agile</option>
             <option value="Continuous Integration">Continuous Integration</option>
             <option value="Continuous Deployment">Continuous Deployment</option>
-            <option value="Version Control">Version Control</option>
-            <option value="Defensive Programming">Defensive Programming</option>
-            <option value="Refactoring">Refactoring</option>
-            <option value="Behaviour Driven Development">Behaviour Driven Development</option>
           </select>
 
           <button onClick={fetchArticles}>Search</button>
