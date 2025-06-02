@@ -1,3 +1,4 @@
+// pages/index.tsx
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -15,12 +16,12 @@ export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [searchText, setSearchText] = useState('');
   const [practiceFilter, setPracticeFilter] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
-  //here is to read the backend address from the enviroment variables
 
   const fetchArticles = async () => {
+    setLoading(true);
     try {
       let url = `${API_BASE}/articles`;
       const params: string[] = [];
@@ -31,17 +32,21 @@ export default function Home() {
       }
 
       const res = await fetch(url);
-      const data = await res.json();
+      const data: Article[] = await res.json();
       setArticles(data);
     } catch (err) {
       console.error('Failed to fetch articles', err);
+      setArticles([]); 
+      //if the request go wrong, then keeo the table as empty
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    //and then when the page reload it will request to show all the articles that have been approve
+    //and extract the articles when reload in first time
     fetchArticles();
-    // an here eslint-disable-next-line react-hooks/exhaustive-deps
+    //here is to eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -58,9 +63,6 @@ export default function Home() {
         <h1>SPEED Article Search</h1>
         <nav>
           <Link href="/submit">Submit Article</Link>
-          {/*
-              <Link href="/admin">Admin Dashboard</Link> 
-          */}
         </nav>
       </header>
       <main>
@@ -95,32 +97,39 @@ export default function Home() {
           </form>
 
           <h2>All Articles</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Authors</th>
-                <th>Year</th>
-                <th>Practice</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {articles.map((article) => (
-                <tr key={article._id}>
-                  <td>
-                    <Link href={`/article/${article._id}`}>
-                      {article.title}
-                    </Link>
-                  </td>
-                  <td>{article.authors}</td>
-                  <td>{article.year || ''}</td>
-                  <td>{article.sePractice || ''}</td>
-                  <td>{article.type || ''}</td>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : articles.length === 0 ? (
+            <p>No articles found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Authors</th>
+                  <th>Year</th>
+                  <th>Practice</th>
+                  <th>Type</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {articles.map((article) => (
+                  <tr key={article._id}>
+                    <td>
+                      <Link href={`/article/${article._id}`}>
+                        {article.title}
+                      </Link>
+                    </td>
+                    <td>{article.authors}</td>
+                    <td>{article.year || ''}</td>
+                    <td>{article.sePractice || ''}</td>
+                    <td>{article.type || ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </section>
       </main>
     </>

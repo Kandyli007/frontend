@@ -3,6 +3,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Head from "next/head";
+import Link from "next/link";
 
 type Article = {
   _id: string;
