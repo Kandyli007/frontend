@@ -16,11 +16,12 @@ export default function Home() {
   const [searchText, setSearchText] = useState('');
   const [practiceFilter, setPracticeFilter] = useState('');
 
+  
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+  //here is to read the backend address from the enviroment variables
 
   const fetchArticles = async () => {
     try {
-      // in here it try will try to build a query params for search and practice filter
       let url = `${API_BASE}/articles`;
       const params: string[] = [];
       if (searchText) params.push(`search=${encodeURIComponent(searchText)}`);
@@ -28,6 +29,7 @@ export default function Home() {
       if (params.length) {
         url += '?' + params.join('&');
       }
+
       const res = await fetch(url);
       const data = await res.json();
       setArticles(data);
@@ -37,10 +39,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // ad then here fetch all approved articles on initial load
+    //and then when the page reload it will request to show all the articles that have been approve
     fetchArticles();
-    // then eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+    // an here eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export default function Home() {
         <h1>SPEED Article Search</h1>
         <nav>
           <Link href="/submit">Submit Article</Link>
-          {/* (also here will  include admin link if desired)
+          {/*
               <Link href="/admin">Admin Dashboard</Link> 
           */}
         </nav>
@@ -64,16 +66,16 @@ export default function Home() {
       <main>
         <section className="search-section">
           <form onSubmit={handleSearch}>
-            <input 
+            <input
               className="search-bar"
-              type="text" 
-              placeholder="Search articles..." 
-              value={searchText} 
-              onChange={(e) => setSearchText(e.target.value)} 
+              type="text"
+              placeholder="Search articles..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
             />
             <div className="filters">
-              <select 
-                value={practiceFilter} 
+              <select
+                value={practiceFilter}
                 onChange={(e) => setPracticeFilter(e.target.value)}
               >
                 <option value="">All SE Practices</option>
@@ -92,7 +94,6 @@ export default function Home() {
             </div>
           </form>
 
-          {/* Articles Table */}
           <h2>All Articles</h2>
           <table>
             <thead>
@@ -105,7 +106,7 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {articles.map(article => (
+              {articles.map((article) => (
                 <tr key={article._id}>
                   <td>
                     <Link href={`/article/${article._id}`}>

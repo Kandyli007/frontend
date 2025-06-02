@@ -18,7 +18,8 @@ type Article = {
 };
 
 export default function ArticlePage() {
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+  //in here will read the backend address from the environment variables
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
   const router = useRouter();
   const { id } = router.query;
 
@@ -28,7 +29,9 @@ export default function ArticlePage() {
   const [commentText, setCommentText] = useState('');
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
 
+  
   const fetchArticle = async (articleId: string) => {
+  // and then pull the articles details
     try {
       const res = await fetch(`${API_BASE}/articles/${articleId}`);
       const data = await res.json();
@@ -44,10 +47,12 @@ export default function ArticlePage() {
     if (id) {
       fetchArticle(id as string);
     }
-    //in here it eslint-disable-next-line react-hooks/exhaustive-deps
+    // and eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+
   const handleAddComment = async (e: React.FormEvent) => {
+    // here we will submit a new comment 提交新评论
     e.preventDefault();
     if (!id || !commentName || !commentText) return;
     setFeedbackMsg(null);
@@ -55,11 +60,11 @@ export default function ArticlePage() {
       const res = await fetch(`${API_BASE}/articles/${id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: commentName, comment: commentText })
+        body: JSON.stringify({ name: commentName, comment: commentText }),
       });
       const data = await res.json();
       if (res.ok) {
-        //and if it works then update the article state with the new comment
+        // and if its working then the backend turn back to the newest article including the new comments
         setArticle(data.article);
         setCommentName('');
         setCommentText('');
@@ -73,17 +78,19 @@ export default function ArticlePage() {
     }
   };
 
+ 
   const handleApproveReject = async (newStatus: 'approved' | 'rejected') => {
+    //here is the moderator to decide approve or reject.
     if (!id) return;
     try {
       const res = await fetch(`${API_BASE}/articles/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
       if (res.ok) {
-        //if on a success, then redirect back to admin page or home
         alert(`Article ${newStatus}.`);
+        //and after moderating, it will jump back to the home page
         router.push(newStatus === 'approved' ? '/' : '/admin');
       } else {
         alert('Failed to update status.');
@@ -122,42 +129,74 @@ export default function ArticlePage() {
         <h1>Article Details</h1>
         <nav>
           <Link href="/">← Back to Search</Link>
-          {/** if needed, link to submit or others can be added */}
+          {/* here is to put article or a backend control console link */}
         </nav>
       </header>
       <main>
         <section>
           <h2>{article.title}</h2>
-          <p><strong>Authors:</strong> {article.authors}</p>
-          {article.year && <p><strong>Year:</strong> {article.year}</p>}
-          {article.sePractice && <p><strong>Practice:</strong> {article.sePractice}</p>}
-          {article.type && <p><strong>Type:</strong> {article.type}</p>}
-          {article.claim && <p><strong>Claim:</strong> {article.claim}</p>}
-          {article.evidence && <p><strong>Evidence:</strong> {article.evidence}</p>}
-          {article.participants && <p><strong>Participants:</strong> {article.participants}</p>}
-          <p><strong>Status:</strong> {article.status.charAt(0).toUpperCase() + article.status.slice(1)}</p>
+          <p>
+            <strong>Authors:</strong> {article.authors}
+          </p>
+          {article.year && (
+            <p>
+              <strong>Year:</strong> {article.year}
+            </p>
+          )}
+          {article.sePractice && (
+            <p>
+              <strong>Practice:</strong> {article.sePractice}
+            </p>
+          )}
+          {article.type && (
+            <p>
+              <strong>Type:</strong> {article.type}
+            </p>
+          )}
+          {article.claim && (
+            <p>
+              <strong>Claim:</strong> {article.claim}
+            </p>
+          )}
+          {article.evidence && (
+            <p>
+              <strong>Evidence:</strong> {article.evidence}
+            </p>
+          )}
+          {article.participants && (
+            <p>
+              <strong>Participants:</strong> {article.participants}
+            </p>
+          )}
+          <p>
+            <strong>Status:</strong>{' '}
+            {article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+          </p>
 
-          {/* if this article is pending review and we are on admin (no auth, but assume admin access), show approve/reject buttons */}
+          {/** and if the article is in pending, show a moderating button */}
           {isPending && (
             <div style={{ margin: '1rem 0' }}>
-              <button onClick={() => handleApproveReject('approved')} style={{ marginRight: '1rem' }}>
+              <button
+                onClick={() => handleApproveReject('approved')}
+                style={{ marginRight: '1rem' }}
+              >
                 Approve
               </button>
-              <button onClick={() => handleApproveReject('rejected')}>
-                Reject
-              </button>
+              <button onClick={() => handleApproveReject('rejected')}>Reject</button>
             </div>
           )}
         </section>
 
-        {/* comments/Reviews Section (only for approved articles typically) */}
-        <section>
+        <section style={{ marginTop: '2rem' }}>
           <h3>Reviews</h3>
           {article.comments && article.comments.length > 0 ? (
             <div>
               {article.comments.map((c, idx) => (
-                <div key={idx} className="review">
-                  <p><strong>{c.name}</strong> (<em>{new Date(c.createdAt).toLocaleString()}</em>)</p>
+                <div key={idx} style={{ marginBottom: '1rem' }}>
+                  <p>
+                    <strong>{c.name}</strong>{' '}
+                    <em>({new Date(c.createdAt).toLocaleString()})</em>
+                  </p>
                   <p>{c.comment}</p>
                 </div>
               ))}
@@ -166,33 +205,40 @@ export default function ArticlePage() {
             <p>No reviews yet.</p>
           )}
 
-          {/* and only allow adding comments if article is approved */}
+          {/** also if only current article is approve, then allow to comment */}
           {!isPending && (
             <form onSubmit={handleAddComment} style={{ marginTop: '1rem' }}>
               <h4>Leave a Review:</h4>
-              <label>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
                 Name:
-                <input 
-                  type="text" 
-                  value={commentName} 
-                  onChange={(e) => setCommentName(e.target.value)} 
-                  required 
+                <input
+                  type="text"
+                  value={commentName}
+                  onChange={(e) => setCommentName(e.target.value)}
+                  required
+                  style={{ marginLeft: '0.5rem' }}
                 />
               </label>
-              <label>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>
                 Comment:
-                <textarea 
-                  value={commentText} 
-                  onChange={(e) => setCommentText(e.target.value)} 
-                  required 
+                <textarea
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  required
+                  style={{ display: 'block', marginTop: '0.3rem', width: '100%', height: '80px' }}
                 />
               </label>
-              <button type="submit">Submit Review</button>
+              <button type="submit" style={{ marginTop: '0.3rem' }}>
+                Submit Review
+              </button>
             </form>
           )}
-          {feedbackMsg && <p><em>{feedbackMsg}</em></p>}
+          {feedbackMsg && (
+            <p style={{ marginTop: '1rem', fontStyle: 'italic' }}>{feedbackMsg}</p>
+          )}
         </section>
       </main>
     </>
   );
 }
+
