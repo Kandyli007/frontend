@@ -1,5 +1,8 @@
 /*the first part：all the CSS variables、dark color mode、word size ect ——— */
-@import "tailwindcss"; 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 /*here is the color for background and foreground */
 :root {
