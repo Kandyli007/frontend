@@ -315,3 +315,12 @@ sr-only {
   display: block;
   font-size: 1.05rem;
 }
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
