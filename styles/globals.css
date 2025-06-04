@@ -48,36 +48,49 @@ body {
 
 /*the front page style */
 header {
-  background: linear-gradient(90deg, #ed6307 60%, #ffb347 100%);
+  background: linear-gradient(90deg, #ff8800 60%, #ffd580 100%);
   color: white;
   padding: 1.2rem 1.5rem 1rem 1.5rem;
   border-radius: 0 0 18px 18px;
-  box-shadow: 0 4px 24px rgba(237, 99, 7, 0.08);
+  box-shadow: 0 6px 24px 0 rgba(237, 99, 7, 0.1), 0 2px 0 #e0a96d;
   margin-bottom: 1.5rem;
-  text-align: center; /* Center all header content */
+  text-align: center;
+  position: relative;
 }
 header h1 {
   margin: 0 0 0.2rem 0;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 900;
   letter-spacing: -1px;
-  text-align: center; /* Ensure h1 is centered */
+  text-align: center;
+  font-family: "Inter", "Poppins", "Roboto", system-ui, Arial, Helvetica,
+    sans-serif;
 }
+
+/* Navigation styling */
 header nav {
   margin-top: 0.2rem;
   display: flex;
-  justify-content: center; /* Center nav links */
+  justify-content: center;
   gap: 1.2rem;
 }
+
+/* "Submit Article" as a button-like link */
 header nav a {
   color: #fff;
-  margin-right: 0; /* Remove right margin, use gap instead */
-  text-decoration: none;
-  font-weight: 500;
-  transition: text-decoration 0.2s;
   font-size: 1rem;
+  font-weight: 500;
+  padding: 0.25rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, text-decoration 0.2s;
+  box-shadow: 0 1px 4px rgba(237, 99, 7, 0.08);
+  display: inline-block;
 }
 header nav a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ff8800;
   text-decoration: underline;
 }
 
