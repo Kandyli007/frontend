@@ -295,3 +295,16 @@ sr-only {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* Make form labels and headings readable on white cards */
+.submission-form label,
+.submission-form h2 {
+  color: #222;
+  font-weight: 600;
+}
+
+.submission-form label {
+  margin-bottom: 0.3rem;
+  display: block;
+  font-size: 1.05rem;
+}
