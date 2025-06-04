@@ -303,6 +303,13 @@ sr-only {
   font-weight: 600;
 }
 
+/* Make headings inside cards readable */
+.search-section h2,
+.article-list h2 {
+  color: #222;
+  font-weight: 700;
+}
+
 .submission-form label {
   margin-bottom: 0.3rem;
   display: block;
