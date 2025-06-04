@@ -1,7 +1,7 @@
 // pages/index.tsx
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import Head from "next/head";
+import Link from "next/link";
 
 type Article = {
   _id: string;
@@ -14,8 +14,8 @@ type Article = {
 
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [searchText, setSearchText] = useState('');
-  const [practiceFilter, setPracticeFilter] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [practiceFilter, setPracticeFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -26,17 +26,18 @@ export default function Home() {
       let url = `${API_BASE}/articles`;
       const params: string[] = [];
       if (searchText) params.push(`search=${encodeURIComponent(searchText)}`);
-      if (practiceFilter) params.push(`sePractice=${encodeURIComponent(practiceFilter)}`);
+      if (practiceFilter)
+        params.push(`sePractice=${encodeURIComponent(practiceFilter)}`);
       if (params.length) {
-        url += '?' + params.join('&');
+        url += "?" + params.join("&");
       }
 
       const res = await fetch(url);
       const data: Article[] = await res.json();
       setArticles(data);
     } catch (err) {
-      console.error('Failed to fetch articles', err);
-      setArticles([]); 
+      console.error("Failed to fetch articles", err);
+      setArticles([]);
       //if the request go wrong, then keeo the table as empty
     } finally {
       setLoading(false);
@@ -81,16 +82,26 @@ export default function Home() {
                 onChange={(e) => setPracticeFilter(e.target.value)}
               >
                 <option value="">All SE Practices</option>
-                <option value="Test-Driven Development">Test-Driven Development</option>
+                <option value="Test-Driven Development">
+                  Test-Driven Development
+                </option>
                 <option value="Code Reviews">Code Reviews</option>
                 <option value="Pair Programming">Pair Programming</option>
                 <option value="Agile">Agile</option>
-                <option value="Continuous Integration">Continuous Integration</option>
-                <option value="Continuous Deployment">Continuous Deployment</option>
+                <option value="Continuous Integration">
+                  Continuous Integration
+                </option>
+                <option value="Continuous Deployment">
+                  Continuous Deployment
+                </option>
                 <option value="Version Control">Version Control</option>
-                <option value="Defensive Programming">Defensive Programming</option>
+                <option value="Defensive Programming">
+                  Defensive Programming
+                </option>
                 <option value="Refactoring">Refactoring</option>
-                <option value="Behaviour Driven Development">Behaviour Driven Development</option>
+                <option value="Behaviour Driven Development">
+                  Behaviour Driven Development
+                </option>
               </select>
               <button type="submit">Search</button>
             </div>
@@ -101,34 +112,51 @@ export default function Home() {
           {loading ? (
             <p>Loading...</p>
           ) : articles.length === 0 ? (
-            <p>No articles found.</p>
+            <div
+              style={{
+                textAlign: "center",
+                color: "#888",
+                padding: "2rem 0",
+              }}
+            >
+              <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+                📭
+              </div>
+              <div style={{ fontWeight: 500, fontSize: "1.1rem" }}>
+                No articles yet.
+                <br />
+                <span style={{ fontWeight: 400 }}>
+                  Try adjusting your search or{" "}
+                  <a
+                    href="/submit"
+                    style={{
+                      color: "#ff8800",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    submit the first one!
+                  </a>
+                </span>
+              </div>
+            </div>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Authors</th>
-                  <th>Year</th>
-                  <th>Practice</th>
-                  <th>Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {articles.map((article) => (
-                  <tr key={article._id}>
-                    <td>
-                      <Link href={`/article/${article._id}`}>
-                        {article.title}
-                      </Link>
-                    </td>
-                    <td>{article.authors}</td>
-                    <td>{article.year || ''}</td>
-                    <td>{article.sePractice || ''}</td>
-                    <td>{article.type || ''}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="article-list">
+              {articles.map((article) => (
+                <div className="article-card" key={article._id}>
+                  <h3>
+                    <Link href={`/article/${article._id}`}>
+                      {article.title}
+                    </Link>
+                  </h3>
+                  <div className="article-meta">
+                    <span>👤 {article.authors}</span>
+                    {article.year && <span>• {article.year}</span>}
+                    {article.sePractice && <span>• {article.sePractice}</span>}
+                    {article.type && <span>• {article.type}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </section>
       </main>
