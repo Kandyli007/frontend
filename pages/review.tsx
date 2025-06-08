@@ -7,8 +7,8 @@ type Article = {
   _id: string;
   title: string;
   authors: string;
-  status: 'pending' | 'approved' | 'rejected';
   excerpt: string;
+  status: 'pending' | 'approved' | 'rejected';
   comments: { content: string; author?: string }[];
 };
 
@@ -46,7 +46,9 @@ export default function ReviewPage() {
 
   return (
     <>
-      <Head><title>Review Pending Articles</title></Head>
+      <Head>
+        <title>Review Pending Articles</title>
+      </Head>
       <header>
         <h1>Pending Articles for Review</h1>
         <nav>
@@ -55,39 +57,49 @@ export default function ReviewPage() {
       </header>
       <main>
         {articles.length === 0 ? (
-          <p>no articles at the moment</p>
+          <p style={{ textAlign: 'center' }}>No articles at the moment.</p>
         ) : (
           articles.map((art) => (
             <div key={art._id} className="review-card">
               <h2>{art.title}</h2>
-              <p>author: {art.authors}</p>
-              <p>content: {art.excerpt}</p>
-              <div>
+              <p><strong>Author:</strong> {art.authors}</p>
+              <p><strong>Excerpt:</strong> {art.excerpt}</p>
+              <div style={{ margin: '1rem 0' }}>
                 <button onClick={() => updateStatus(art._id, 'approved')}>
                   Approve
                 </button>
-                <button onClick={() => updateStatus(art._id, 'rejected')}>
+                <button onClick={() => updateStatus(art._id, 'rejected')} style={{ marginLeft: '1rem' }}>
                   Reject
                 </button>
               </div>
-              <div style={{ marginTop: 8 }}>
+              <div>
                 <h4>Comments</h4>
                 <ul>
                   {art.comments.map((c, i) => (
-                    <li key={i}>{c.author}: {c.content}</li>
+                    <li key={i}>
+                      <strong>{c.author || 'Anonymous'}:</strong> {c.content}
+                    </li>
                   ))}
                 </ul>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     const f = e.currentTarget;
-                    const inp = (f.elements.namedItem('comment') as HTMLInputElement);
+                    const inp = f.elements.namedItem('comment') as HTMLInputElement;
                     addComment(art._id, inp.value);
                     inp.value = '';
                   }}
+                  style={{ marginTop: '0.5rem' }}
                 >
-                  <input name="comment" placeholder="Add comment…" required />
-                  <button type="submit">Add</button>
+                  <input
+                    name="comment"
+                    placeholder="Add comment…"
+                    required
+                    style={{ width: '70%', padding: '0.5rem' }}
+                  />
+                  <button type="submit" style={{ marginLeft: '0.5rem' }}>
+                    Add
+                  </button>
                 </form>
               </div>
             </div>
@@ -97,4 +109,5 @@ export default function ReviewPage() {
     </>
   );
 }
+
 

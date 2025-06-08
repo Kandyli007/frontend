@@ -345,3 +345,31 @@ sr-only {
 
   margin-right: 0.5rem;
 }
+
+
+   .review-card,
+   .detail-card {
+ 
+     background: rgba(255, 255, 255, 0.95);
+     color: #222;                   
+     padding: 1.5rem;                
+     border-radius: 12px;           
+     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+     margin: 1.5rem auto;            
+     max-width: 600px;               
+     position: relative;            
+     z-index: 1;
+   }
+   
+ 
+   .review-card h2,
+   .review-card p,
+   .review-card button,
+   .review-card input,
+   .review-card textarea,
+   .detail-card h2,
+   .detail-card p,
+   .detail-card li {
+     color: #222;
+   }
+   
