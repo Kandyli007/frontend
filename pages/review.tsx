@@ -16,7 +16,6 @@ export default function ReviewPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-
   const fetchPending = async () => {
     const res = await fetch(`${API}/articles?status=pending`);
     const data: Article[] = await res.json();
@@ -27,16 +26,14 @@ export default function ReviewPage() {
     fetchPending();
   }, []);
 
- 
   const updateStatus = async (id: string, status: 'approved' | 'rejected') => {
     await fetch(`${API}/articles/${id}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
-    fetchPending(); 
+    fetchPending();
   };
-
 
   const addComment = async (id: string, content: string) => {
     await fetch(`${API}/articles/${id}/comments`, {
@@ -61,10 +58,10 @@ export default function ReviewPage() {
           <p>no articles at the moment</p>
         ) : (
           articles.map((art) => (
-            <div key={art._id} style={{ border: '1px solid #ccc', padding: 16, margin: 16 }}>
+            <div key={art._id} className="review-card">
               <h2>{art.title}</h2>
-              <p>author：{art.authors}</p>
-              <p>content：{art.excerpt}</p>
+              <p>author: {art.authors}</p>
+              <p>content: {art.excerpt}</p>
               <div>
                 <button onClick={() => updateStatus(art._id, 'approved')}>
                   Approve
@@ -100,3 +97,4 @@ export default function ReviewPage() {
     </>
   );
 }
+

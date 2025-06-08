@@ -324,3 +324,24 @@ sr-only {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+/* here is the review page text box style */
+.review-card {
+  background: #fff;                    
+  opacity: 1;                          
+  border: 1px solid #ddd;             
+  border-radius: 12px;                 
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08); 
+  padding: 1.5rem;                     /
+  margin: 1.5rem 0;                   
+}
+.review-card h2,
+.review-card p,
+.review-card h4,
+.review-card li {
+  color: #333;                        
+}
+.review-card button {
+
+  margin-right: 0.5rem;
+}
