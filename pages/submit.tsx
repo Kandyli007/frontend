@@ -17,7 +17,7 @@ export default function SubmitPage() {
   const [description, setDescription] = useState('');
   //and a breif decribtion
   const [excerpt, setExcerpt] = useState('');
-  const [Content, setContent] = useState('');
+  const [content, setContent] = useState('');
 
   const [message, setMessage] = useState<string | null>(null);
 
@@ -43,7 +43,7 @@ export default function SubmitPage() {
       //leave as blank
 
       excerpt,
-      Content,
+      content,
     };
 
     try {
@@ -62,6 +62,8 @@ export default function SubmitPage() {
         setYear('');
         setDOI('');
         setDescription('');
+        setExcerpt('');
+        setContent('');
       } else {
         setMessage(data.error || 'Submission failed. Please check your input.');
       }
@@ -136,6 +138,24 @@ export default function SubmitPage() {
                 required
               />
             </label>
+            <label>
+  Excerpt:
+  <textarea
+    value={excerpt}
+    onChange={e => setExcerpt(e.target.value)}
+    required
+  />
+</label>
+
+<label>
+  Content:
+  <textarea
+    value={content}
+    onChange={e => setContent(e.target.value)}
+    required
+  />
+</label>
+
             <button type="submit">Submit</button>
           </form>
           {message && <p><em>{message}</em></p>}
