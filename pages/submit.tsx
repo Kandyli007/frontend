@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
+
 export default function SubmitPage() {
   // here is to readf the backend address from the evironment variables 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -15,6 +16,8 @@ export default function SubmitPage() {
   //here is the DOI or URL
   const [description, setDescription] = useState('');
   //and a breif decribtion
+  const [excerpt, setExcerpt] = useState('');
+  const [Content, setContent] = useState('');
 
   const [message, setMessage] = useState<string | null>(null);
 
@@ -38,6 +41,9 @@ export default function SubmitPage() {
       //here make the “Journal/Conference” as type
       participants: '',            
       //leave as blank
+
+      excerpt,
+      Content,
     };
 
     try {
